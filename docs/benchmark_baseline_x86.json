@@ -1,0 +1,32 @@
+{
+  "opencv_build": [
+    "",
+    "General configuration for OpenCV 5.0.0 ====================================="
+  ],
+  "engine": {
+    "opencv_version": "5.0.0",
+    "dnn_engine": "ENGINE_NEW",
+    "fp16": false
+  },
+  "cpu": {
+    "platform": "Linux-7.0.0-39-generic-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "processor": "x86_64",
+    "model_name": "AMD EPYC 9D25 126-Core Processor"
+  },
+  "frames": 15,
+  "image": "assets/sample2.jpg",
+  "total_ms": {
+    "mean": 594.3656430669458,
+    "stdev": 108.46039412334477,
+    "min": 499.9963910013321,
+    "max": 928.0194819984899
+  },
+  "stages_ms_mean": {
+    "detect": 368.4571211381541,
+    "track": 0.1666233387430624,
+    "ppe": 0.049544020736115,
+    "zones": 36.70328623757469
+  },
+  "fps_mean": 1.6824660235069575
+}

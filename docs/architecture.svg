@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="760" viewBox="0 0 1280 760" font-family="Inter, 'Segoe UI', system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="aws" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff9900"/><stop offset="1" stop-color="#ff7700"/>
+    </linearGradient>
+    <linearGradient id="cv" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5b8def"/><stop offset="1" stop-color="#7c5cff"/>
+    </linearGradient>
+    <linearGradient id="ag" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#10b981"/><stop offset="1" stop-color="#0ea5e9"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#94a3b8"/>
+    </marker>
+    <style>
+      .t{fill:#f1f5f9;font-size:15px;font-weight:700}
+      .s{fill:#cbd5e1;font-size:12.5px}
+      .xs{fill:#94a3b8;font-size:11px}
+      .box{rx:10}
+      .lbl{fill:#0f172a;font-size:13px;font-weight:700}
+      .llbl{fill:#0f172a;font-size:11px}
+    </style>
+  </defs>
+
+  <rect width="1280" height="760" fill="url(#bg)"/>
+
+  <text x="40" y="48" fill="#f8fafc" font-size="26" font-weight="800">SiteSentry — System Architecture</text>
+  <text x="40" y="72" fill="#94a3b8" font-size="14">Agentic Vision Safety Inspector · OpenCV 5 + AWS (ap-south-1) · solo build</text>
+
+  <!-- Browser -->
+  <rect x="40" y="100" width="230" height="150" fill="#1e293b" stroke="#38bdf8" stroke-width="2" rx="10"/>
+  <text x="60" y="130" class="t">Judge's Browser</text>
+  <text x="60" y="152" class="s">Dashboard UI</text>
+  <text x="60" y="172" class="xs">• upload photo / video</text>
+  <text x="60" y="190" class="xs">• webcam (MJPEG)</text>
+  <text x="60" y="208" class="xs">• annotated feed + trace</text>
+  <text x="60" y="226" class="xs">• supervisor approve / reject</text>
+
+  <!-- EC2 big box -->
+  <rect x="330" y="100" width="600" height="430" fill="#141d33" stroke="#5b8def" stroke-width="2" rx="12"/>
+  <text x="355" y="132" fill="#dbeafe" font-size="16" font-weight="800">EC2 t4g.micro · Graviton2 Arm · Ubuntu 24.04 · ap-south-1</text>
+  <text x="355" y="154" class="xs">Flask + gunicorn + systemd · IAM instance profile (least privilege, no hardcoded creds)</text>
+
+  <!-- OpenCV pipeline -->
+  <rect x="355" y="175" width="550" height="180" fill="#1e2a4a" stroke="url(#cv)" stroke-width="1.5" rx="10"/>
+  <text x="372" y="200" fill="#bfdbfe" font-size="14" font-weight="800">OpenCV 5 VISION PIPELINE (cv2 5.0.0)</text>
+  <text x="372" y="220" class="xs">DNN engine: ENGINE_NEW (5.0.0) · FP16 blob path · YOLOv8n person det + SafetyVision YOLOv8s PPE det, native cv2.dnn</text>
+  <g font-size="12" fill="#e2e8f0">
+    <rect x="372" y="232" width="160" height="34" fill="#334155" rx="7"/><text x="384" y="253" fill="#e2e8f0" font-size="12">1 · decode / resize</text>
+    <rect x="542" y="232" width="160" height="34" fill="#334155" rx="7"/><text x="554" y="253" fill="#e2e8f0" font-size="12">2 · detect (DNN)</text>
+    <rect x="712" y="232" width="160" height="34" fill="#334155" rx="7"/><text x="724" y="253" fill="#e2e8f0" font-size="12">3 · Kalman track</text>
+    <rect x="372" y="274" width="160" height="34" fill="#334155" rx="7"/><text x="384" y="295" fill="#e2e8f0" font-size="12">4 · PPE per track</text>
+    <rect x="542" y="274" width="160" height="34" fill="#334155" rx="7"/><text x="554" y="295" fill="#e2e8f0" font-size="12">5 · zones (MOG2)</text>
+    <rect x="712" y="274" width="160" height="34" fill="#334155" rx="7"/><text x="724" y="295" fill="#e2e8f0" font-size="12">6 · annotate+blur</text>
+  </g>
+  <text x="372" y="330" class="xs">metrics → per-stage ms · faces blurred by default (Haar) · no face recognition anywhere</text>
+
+  <!-- Agent loop -->
+  <rect x="355" y="372" width="550" height="138" fill="#12332a" stroke="url(#ag)" stroke-width="1.5" rx="10"/>
+  <text x="372" y="397" fill="#a7f3d0" font-size="14" font-weight="800">AGENT LOOP — perceive → plan → act</text>
+  <text x="372" y="419" class="s">perceive: CV events → plan: auditable policy table (severity / escalation) → act:</text>
+  <g font-size="12">
+    <rect x="372" y="430" width="128" height="30" fill="#065f46" rx="7"/><text x="384" y="449" fill="#ecfdf5" font-size="12">log → DynamoDB</text>
+    <rect x="508" y="430" width="128" height="30" fill="#065f46" rx="7"/><text x="520" y="449" fill="#ecfdf5" font-size="12">archive → S3</text>
+    <rect x="644" y="430" width="118" height="30" fill="#065f46" rx="7"/><text x="656" y="449" fill="#ecfdf5" font-size="12">alert → SNS</text>
+    <rect x="770" y="430" width="118" height="30" fill="#92400e" rx="7"/><text x="778" y="449" fill="#fef3c7" font-size="12">human approval</text>
+  </g>
+  <text x="372" y="492" class="xs">vision evidence visibly changes the action · consequential actions need supervisor approval · Bedrock summary optional</text>
+
+  <!-- arrows browser <-> ec2 -->
+  <line x1="270" y1="175" x2="330" y2="175" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="272" y="165" class="xs">HTTPS</text>
+  <line x1="330" y1="200" x2="270" y2="200" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="272" y="218" class="xs">MJPEG/SSE</text>
+
+  <!-- AWS services column -->
+  <text x="985" y="132" fill="#ffedd5" font-size="16" font-weight="800">AWS services (boto3)</text>
+  <g>
+    <rect x="975" y="150" width="265" height="64" fill="url(#aws)" rx="10"/>
+    <text x="990" y="175" class="lbl">S3 — evidence archive</text>
+    <text x="990" y="195" class="llbl">raw/ annotated/ evidence/ · 30-day lifecycle</text>
+
+    <rect x="975" y="226" width="265" height="64" fill="url(#aws)" rx="10"/>
+    <text x="990" y="251" class="lbl">DynamoDB — event log</text>
+    <text x="990" y="271" class="llbl">site_id + timestamp · severity GSI</text>
+
+    <rect x="975" y="302" width="265" height="64" fill="url(#aws)" rx="10"/>
+    <text x="990" y="327" class="lbl">SNS — supervisor alerts</text>
+    <text x="990" y="347" class="llbl">email fan-out on high severity</text>
+
+    <rect x="975" y="378" width="265" height="64" fill="url(#aws)" rx="10"/>
+    <text x="990" y="403" class="lbl">Rekognition — 2nd opinion</text>
+    <text x="990" y="423" class="llbl">DetectProtectiveEquipment · agreement matrix</text>
+
+    <rect x="975" y="454" width="265" height="64" fill="url(#aws)" rx="10"/>
+    <text x="990" y="479" class="lbl">CloudWatch — observability</text>
+    <text x="990" y="499" class="llbl">PipelineLatencyMs metric · error alarms</text>
+  </g>
+
+  <!-- ec2 -> aws arrows -->
+  <g stroke="#ff9900" stroke-width="2" marker-end="url(#arrow)">
+    <line x1="930" y1="400" x2="975" y2="182"/>
+    <line x1="930" y1="420" x2="975" y2="258"/>
+    <line x1="930" y1="440" x2="975" y2="334"/>
+    <line x1="930" y1="460" x2="975" y2="410"/>
+    <line x1="930" y1="480" x2="975" y2="486"/>
+  </g>
+  <text x="936" y="300" class="xs" fill="#fdba74">boto3</text>
+
+  <!-- local fallback note -->
+  <rect x="40" y="560" width="1200" height="160" fill="#1e293b" stroke="#475569" stroke-width="1.5" rx="10"/>
+  <text x="60" y="592" class="t">Local-fallback mode (zero AWS spend for build &amp; judging)</text>
+  <text x="60" y="616" class="s">Every boto3 client auto-degrades to a local JSONL/file store when credentials are absent — the full perceive → plan → act</text>
+  <text x="60" y="638" class="s">loop, dashboard, trace, approvals and evidence gallery run identically. The public demo surface is a clearly-labeled</text>
+  <text x="60" y="660" class="s">SIMULATED static showcase (demo/index.html); the rules explicitly allow an arranged live screen-share of the real Flask app.</text>
+  <text x="60" y="692" class="xs">Responsible-use: face blur ON by default · no face recognition · human-in-the-loop for work-stoppage · 30-day retention · conservative thresholds</text>
+</svg>

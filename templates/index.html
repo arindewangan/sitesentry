@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SiteSentry — AI Construction-Site Safety Monitor</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo" aria-hidden="true">🛡️</span>
+    <div>
+      <h1>SiteSentry</h1>
+      <p class="tagline">AI construction-site safety monitor</p>
+    </div>
+  </div>
+  <div class="badges">
+    {% if demo_badge %}
+    <span class="badge badge-demo">DEMO — local AWS fallback mode</span>
+    {% else %}
+    <span class="badge badge-aws">AWS mode: {{ aws_mode }}</span>
+    {% endif %}
+    <span class="badge badge-engine" title="{{ engine.description }}">engine: {{ engine.name }}</span>
+    <a class="badge badge-link" href="/supervisor">Supervisor →</a>
+  </div>
+</header>
+
+<main class="layout">
+  <!-- LEFT COLUMN -->
+  <section class="col">
+    <div class="card">
+      <h2>Upload footage</h2>
+      <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Drop an image or video here, or click to browse">
+        <p class="dz-main">Drop an image or video here</p>
+        <p class="dz-sub">or click to browse · images analyzed as a single frame, videos as up to 12 evenly-spaced frames</p>
+        <input type="file" id="fileInput" accept="image/*,video/*" hidden>
+      </div>
+      <div class="row samples">
+        <span class="lbl">Try a sample:</span>
+        {% for n in samples %}
+        <button class="btn btn-ghost sample-btn" data-sample="{{ n }}">Sample {{ n }} <em>(synthetic)</em></button>
+        {% endfor %}
+        {% if not samples %}
+        <span class="muted">no sample assets yet</span>
+        {% endif %}
+      </div>
+      <p class="webcam-note">📷 Webcam live stream is experimental — the camera may be unavailable on this host.
+        <button id="streamBtn" class="btn btn-ghost btn-sm">Try live stream</button>
+        <span class="muted">Uploads and samples always work.</span>
+      </p>
+      <label class="toggle-row">
+        <input type="checkbox" id="blurToggle" {% if blur_faces %}checked{% endif %}>
+        <span>Blur faces in annotated output (privacy)</span>
+      </label>
+      <div id="uploadStatus" class="status" aria-live="polite"></div>
+    </div>
+
+    <div class="card">
+      <h2>Annotated result</h2>
+      <div class="result-wrap">
+        <img id="annotated" alt="Annotated frame will appear here" src="">
+        <p id="noResult" class="muted">No analysis yet — upload footage or try a synthetic sample.</p>
+      </div>
+      <div class="meta-row">
+        <span>⏱ <strong id="latency">–</strong> per frame</span>
+        <span>⚙️ engine <strong id="engineName">{{ engine.name }}</strong></span>
+        <span>🖼 <strong id="frameCount">0</strong> frame(s) processed</span>
+      </div>
+      <div id="eventChips" class="chips"></div>
+    </div>
+
+    <div class="card">
+      <h2>Evidence gallery</h2>
+      <p class="muted">Thumbnails captured from recent detections.</p>
+      <div id="evidence" class="evidence-grid"></div>
+    </div>
+  </section>
+
+  <!-- RIGHT COLUMN -->
+  <section class="col">
+    <div class="card">
+      <h2>Agent trace <span class="live-dot" title="auto-refreshing"></span></h2>
+      <p class="muted">perceive → plan → act, polled every 2s</p>
+      <ol id="trace" class="trace"></ol>
+    </div>
+
+    <div class="card">
+      <h2>Supervisor approvals <a class="card-link" href="/supervisor">open queue →</a></h2>
+      <div id="pendingSnippet" class="pending-snippet"><p class="muted">Loading…</p></div>
+    </div>
+
+    <div class="card">
+      <h2>Summary</h2>
+      <div class="stat-grid">
+        <div class="stat"><span class="stat-num" id="sumTotal">0</span><span class="stat-lbl">incidents</span></div>
+        <div class="stat"><span class="stat-num" id="sumAvg">–</span><span class="stat-lbl">avg latency</span></div>
+        <div class="stat"><span class="stat-num" id="sumFrames">0</span><span class="stat-lbl">frames</span></div>
+      </div>
+      <div class="row wrap" id="sevBadges"></div>
+      <div class="row wrap" id="typeBadges"></div>
+    </div>
+
+    <div class="card">
+      <h2>Rekognition second opinion</h2>
+      <div id="agreement" class="agreement"><p class="muted">Loading…</p></div>
+    </div>
+
+    <div class="card note">
+      <h2>Known failure cases</h2>
+      <ul>
+        <li>Heavy occlusion / night footage lowers detection recall.</li>
+        <li>Small or distant PPE (hard hats) may be missed beyond ~15 m.</li>
+        <li>Video codecs other than H.264 may extract fewer frames.</li>
+        <li>No camera on this host → live stream returns 503; use upload or samples.</li>
+      </ul>
+      <p>Full notes: <a href="docs/FAILURE_CASES.md">docs/FAILURE_CASES.md</a></p>
+    </div>
+  </section>
+</main>
+
+<div id="toasts" class="toasts" aria-live="assertive"></div>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

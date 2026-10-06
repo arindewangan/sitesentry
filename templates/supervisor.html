@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SiteSentry — Supervisor approvals</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo" aria-hidden="true">🛡️</span>
+    <div>
+      <h1>SiteSentry <span class="sup-title">/ Supervisor</span></h1>
+      <p class="tagline">Human-in-the-loop approval queue</p>
+    </div>
+  </div>
+  <div class="badges">
+    {% if demo_badge %}
+    <span class="badge badge-demo">DEMO — local AWS fallback mode</span>
+    {% else %}
+    <span class="badge badge-aws">AWS mode: {{ aws_mode }}</span>
+    {% endif %}
+    <a class="badge badge-link" href="/">← Dashboard</a>
+  </div>
+</header>
+
+<main class="layout single">
+  <section class="col">
+    <div class="card">
+      <h2>Pending approvals <span id="pendingCount" class="count-pill">0</span></h2>
+      <p class="muted">High / critical-severity events wait here for a human decision before any action is taken.</p>
+      <div id="pendingList" class="approval-list"><p class="muted">Loading…</p></div>
+    </div>
+    <div class="card">
+      <h2>Decision history</h2>
+      <div id="historyList" class="approval-list"><p class="muted">Loading…</p></div>
+    </div>
+  </section>
+</main>
+
+<div id="toasts" class="toasts" aria-live="assertive"></div>
+
+<script src="{{ url_for('static', filename='js/supervisor.js') }}"></script>
+</body>
+</html>

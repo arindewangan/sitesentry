@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+models/*.onnx
+models/*.data
+.env
+data/local/
+*.log
+.DS_Store
